@@ -19,21 +19,21 @@ contract CrowdFunding {
     uint256 public campaignCount;
 
     //  constructor
+    constructor(){}
 
     //  modifiers
 
     //  functions
     function createCampaign(
         address _owner,
-        string memory title,
+        string memory _title,
         string memory _description,
         string memory _image,
         uint256 _target,
-        uint256 _deadline,
-
+        uint256 _deadline
     ) public returns(uint256){
         Campaign storage newCampaign= campaigns[campaignCount];
-        require(newCampaign.timestamp<block.timestamp,"deadline should be from the future");
+        require(newCampaign.deadline<block.timestamp,"deadline should be from the future");
 
         newCampaign.owner=_owner;
         newCampaign.title=_title;
@@ -47,24 +47,24 @@ contract CrowdFunding {
 
         return campaignCount-1;
 
-    };
+    }
 
-    function donateToCampaign(uint256 _id){
+    function donateToCampaign(uint256 _id) public payable{
         require(_id<campaignCount,"Invalid campaign id");
         uint256 amount=msg.value;
         Campaign storage currentCampaign = campaigns[_id];
         currentCampaign.donators.push(msg.sender);
         currentCampaign.donations.push(amount);
 
-        (bool sent,)=payable(campaign.owner).call{value:amount}("");
+        (bool sent,)=payable(currentCampaign.owner).call{value:amount}("");
         if(sent){
             currentCampaign.amountCollected=currentCampaign.amountCollected+amount;
         }
-    };
+    }
 
     function getDonators(uint256 _id) public view returns(address[] memory,uint256[] memory){
         return(campaigns[_id].donators,campaigns[_id].donations);
-    };
+    }
 
     function getCampaigns()public view returns(Campaign[] memory){
         Campaign[] memory allCampaigns= new Campaign[](campaignCount);
@@ -75,5 +75,5 @@ contract CrowdFunding {
         }
 
         return allCampaigns;
-    };
+    }
 }
