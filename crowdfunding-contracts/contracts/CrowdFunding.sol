@@ -49,7 +49,18 @@ contract CrowdFunding {
 
     };
 
-    function donateToCampaign(){};
+    function donateToCampaign(uint256 _id){
+        require(_id<campaignCount,"Invalid campaign id");
+        uint256 amount=msg.value;
+        Campaign storage currentCampaign = campaigns[_id];
+        currentCampaign.donators.push(msg.sender);
+        currentCampaign.donations.push(amount);
+
+        (bool sent,)=payable(campaign.owner).call{value:amount}("");
+        if(sent){
+            currentCampaign.amountCollected=currentCampaign.amountCollected+amount;
+        }
+    };
     function getDonators(){};
     function getCampaigns(){};
 }
