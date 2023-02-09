@@ -1,11 +1,25 @@
 import { ConnectWallet } from "@thirdweb-dev/react";
 // import "./styles/Home.css";
 import './index.css'
+import {Routes ,Route} from 'react-router-dom'
+import {Home} from './pages/index';
+import { Navbar, Sidebar } from "./components";
 
-export default function Home() {
+export default function App() {
   return (
-    <div >
-      <h1>Hello App</h1>
+    <div className="relative sm:p-8 p-4 bg-[#13131a] min-h-screen flex flex-row">
+      {/*  sidebar */}
+      <div className="sm:flex hidden mr-10 relative">
+        <Sidebar />
+      </div>
+      {/* navbar */}
+      <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+
+      </div>
      
    
     </div>
