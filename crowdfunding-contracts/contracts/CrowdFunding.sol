@@ -19,7 +19,6 @@ contract CrowdFunding {
     uint256 public campaignCount;
 
     //  constructor
-    constructor(){}
 
     //  modifiers
 
@@ -40,7 +39,7 @@ contract CrowdFunding {
         newCampaign.description=_description;
         newCampaign.image=_image;
         newCampaign.target=_target;
-        newCampaign.target=_target;
+        newCampaign.deadline=_deadline;
         newCampaign.amountCollected=0;
 
         campaignCount++;
@@ -57,6 +56,7 @@ contract CrowdFunding {
         currentCampaign.donations.push(amount);
 
         (bool sent,)=payable(currentCampaign.owner).call{value:amount}("");
+
         if(sent){
             currentCampaign.amountCollected=currentCampaign.amountCollected+amount;
         }
