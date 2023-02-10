@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
-import { money } from '../assets';
+import { createCampaign, money } from '../assets';
 import { CustomButton, FormField } from '../components';
 import { checkIfImage } from '../utils';
+import { useStateContext } from '../context';
 
 const CreateCampaign = () => {
   const navigate = useNavigate();
+  const { CreateCampaign } = useStateContext();
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     name: '',
@@ -20,11 +22,24 @@ const CreateCampaign = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("**@ handleSubmit called for create campaign , form is , ", form);
+    //  check for valid image url and create campaign for valid image
+    checkIfImage(form.image, async (imageExists) => {
+      if (imageExists) {
+        setIsLoading(true);
+        await CreateCampaign({ ...form, target: ethers.utils.parseUnits(form.target, 18) });
+        setIsLoading(false);
+        navigate('/');
+      }
+      else {
+        alert('Please Provide valid image url');
+        setForm({ ...form, image: '' })
+      }
+
+    })
   }
 
   const handleFormFieldChange = (e, fieldName) => {
     setForm({ ...form, [fieldName]: e.target.value })
-
   }
 
 
