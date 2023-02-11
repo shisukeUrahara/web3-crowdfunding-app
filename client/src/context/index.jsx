@@ -38,13 +38,13 @@ export const StateContextProvider = ({ children }) => {
         const campaignData = await contract.call('getCampaigns');
         console.log("**@ getCampaign data is , ", campaignData);
         const parsedCampaigns = campaignData.map((campaign, index) => ({
-            pid: index,
+            pId: index,
             owner: campaign.owner,
             title: campaign.title,
             description: campaign.description,
             target: ethers.utils.formatUnits(campaign.target.toString(), 18).toString(),
             deadline: campaign.deadline.toNumber(),
-            amountCollected: campaign.amountCollected.toString(),
+            amountCollected: ethers.utils.formatUnits(campaign.amountCollected.toString(), 18).toString(),
             image: campaign.image
         }));
 
@@ -62,6 +62,38 @@ export const StateContextProvider = ({ children }) => {
         return filteredCampaigns
     }
 
+    const donateToCampaign = async (pId, amount) => {
+        console.log("**@ donateToCampaign called with pId ", pId);
+        console.log("**@ donateToCampaign called with amount ", amount);
+
+        const data = await contract.call('donateToCampaign', pId, { value: ethers.utils.parseEther(amount) });
+        return data;
+    }
+
+    const getDonations = async (pId) => {
+        console.log("**@ getDonations called with pid . ", pId);
+        const donations = await contract.call('getDonators', pId);
+        console.log("**@ getDonations called donations is ,  ", donations);
+
+        const numberOfDonators = donations[0].length;
+        console.log("**@ getDonations called numberOfDonators is ,  ", numberOfDonators);
+
+
+        const parsedDonations = [];
+
+        for (let i = 0; i < numberOfDonators; i++) {
+            parsedDonations.push({
+                donator: donations[0][i],
+                donation: ethers.utils.formatUnits(donations[1][i].toString(), 18)
+            })
+        }
+
+        console.log("**@ before returning parsedDonations is , ", parsedDonations)
+
+        return parsedDonations;
+
+    }
+
     return (
         <StateContext.Provider value={{
             address,
@@ -69,7 +101,9 @@ export const StateContextProvider = ({ children }) => {
             CreateCampaign: publishCampaign,
             connect,
             getCampaigns,
-            getUserCampaigns
+            getUserCampaigns,
+            donateToCampaign,
+            getDonations
         }}>
             {children}
 

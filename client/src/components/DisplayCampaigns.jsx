@@ -8,7 +8,6 @@ const DisplayCampaigns = ({ title, isLoading, campaigns }) => {
 
     const handleNavigate = (campaign) => {
         navigate(`/campaign-details/${campaign.title}`, { state: campaign })
-
     }
 
     return (
