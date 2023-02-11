@@ -1,6 +1,7 @@
 import React, { useContext, createContext } from 'react';
 import { useAddress, useContract, useMetamask, useContractWrite } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
+import { DisplayCampaigns } from '../components';
 
 
 const StateContext = createContext();
@@ -33,12 +34,34 @@ export const StateContextProvider = ({ children }) => {
 
     }
 
+    const getCampaigns = async () => {
+        const campaignData = await contract.call('getCampaigns');
+        console.log("**@ getCampaign data is , ", campaignData);
+        const parsedCampaigns = campaignData.map((campaign, index) => ({
+            pid: index,
+            owner: campaign.owner,
+            title: campaign.title,
+            description: campaign.description,
+            target: ethers.utils.parseEther(campaign.target.toString()),
+            deadline: campaign.deadline.toNumber(),
+            amountCollected: campaign.amountCollected.toString(),
+            image: campaign.image
+        }));
+
+        console.log("**@ parsedCampaigns data is , ", parsedCampaigns);
+        return parsedCampaigns
+
+
+
+    }
+
     return (
         <StateContext.Provider value={{
             address,
             contract,
             CreateCampaign: publishCampaign,
-            connect
+            connect,
+            getCampaigns
         }}>
             {children}
 
