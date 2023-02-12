@@ -5,6 +5,7 @@ import FormField from "./FormField";
 import DisplayCampaigns from "./DisplayCampaigns";
 import FundCard from "./FundCard";
 import CountBox from "./CountBox";
+import Loader from "./Loader";
 
 export{
     Sidebar,
@@ -13,5 +14,6 @@ export{
     FormField,
     DisplayCampaigns,
     FundCard,
-    CountBox
+    CountBox,
+    Loader
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { daysLeft, calculateBarPercentage } from '../utils'
 import { useStateContext } from '../context'
-import { CountBox, CustomButton } from '../components'
+import { CountBox, CustomButton, Loader } from '../components'
 import { thirdweb } from '../assets';
 import { useLocation } from 'react-router-dom';
 import { ethers } from 'ethers';
@@ -37,7 +37,7 @@ const CampaignDetails = () => {
 
   return (
     <div>
-      {isLoading && 'Loading ...'}
+      {isLoading && <Loader message="Fetching Campaign details" />}
 
       <div className='w-full flex md:flex-row flex-col mt-10 gap-[30px]'>
         <div className='flex-1 flex-col'>
