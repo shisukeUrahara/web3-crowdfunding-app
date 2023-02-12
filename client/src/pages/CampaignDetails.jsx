@@ -3,12 +3,13 @@ import { daysLeft, calculateBarPercentage } from '../utils'
 import { useStateContext } from '../context'
 import { CountBox, CustomButton, Loader } from '../components'
 import { thirdweb } from '../assets';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
 const CampaignDetails = () => {
   const { state } = useLocation();
   console.log("**@ campaign details are , ", state);
+  const navigate = useNavigate();
   const { getDonations, address, contract, donateToCampaign } = useStateContext();
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState('');
@@ -16,8 +17,12 @@ const CampaignDetails = () => {
   const remainingDays = daysLeft(state.deadline);
 
   const handleDonate = async () => {
+    console.log("**@ handeDonate called with state , ", state);
+    console.log("**@ handeDonate called with amount , ", amount);
+
     setIsLoading(true);
-    donateToCampaign(state.pId, amount);
+    await donateToCampaign(state.pId, amount);
+    navigate('/')
     setIsLoading(false);
   }
 
@@ -37,7 +42,7 @@ const CampaignDetails = () => {
 
   return (
     <div>
-      {isLoading && <Loader message="Fetching Campaign details" />}
+      {isLoading && <Loader message="Transaction in progress. Please wait." />}
 
       <div className='w-full flex md:flex-row flex-col mt-10 gap-[30px]'>
         <div className='flex-1 flex-col'>
