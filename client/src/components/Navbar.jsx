@@ -32,7 +32,6 @@ const Navbar = () => {
               navigate('/create-campaign')
             }
             else {
-              console.log("**@ about to connect wallet ");
               connect();
             }
           }}
@@ -102,7 +101,6 @@ const Navbar = () => {
                   navigate('/create-campaign')
                 }
                 else {
-                  console.log("**@ about to connect wallet ");
                   connect();
                 }
               }}

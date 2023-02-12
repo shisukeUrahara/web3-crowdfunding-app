@@ -21,7 +21,6 @@ const CreateCampaign = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("**@ handleSubmit called for create campaign , form is , ", form);
     //  check for valid image url and create campaign for valid image
     checkIfImage(form.image, async (imageExists) => {
       if (imageExists) {

@@ -23,12 +23,8 @@ export const StateContextProvider = ({ children }) => {
                 new Date(form.deadline).getTime()
             ])
 
-            console.log("**@ campaign creation success , data is , ", data);
         }
         catch (err) {
-            console.log("**@ campaign creation error , err is , ", err);
-
-
         }
 
 
@@ -36,7 +32,6 @@ export const StateContextProvider = ({ children }) => {
 
     const getCampaigns = async () => {
         const campaignData = await contract.call('getCampaigns');
-        console.log("**@ getCampaign data is , ", campaignData);
         const parsedCampaigns = campaignData.map((campaign, index) => ({
             pId: index,
             owner: campaign.owner,
@@ -47,38 +42,23 @@ export const StateContextProvider = ({ children }) => {
             amountCollected: ethers.utils.formatUnits(campaign.amountCollected.toString(), 18).toString(),
             image: campaign.image
         }));
-
-        console.log("**@ parsedCampaigns data is , ", parsedCampaigns);
         return parsedCampaigns
-
-
-
     }
 
     const getUserCampaigns = async () => {
         const campaigns = await getCampaigns();
         const filteredCampaigns = campaigns.filter((campaign) => campaign.owner === address);
-        console.log("**@ filtered Campaigns are , ", filteredCampaigns)
         return filteredCampaigns
     }
 
     const donateToCampaign = async (pId, amount) => {
-        console.log("**@ donateToCampaign called with pId ", pId);
-        console.log("**@ donateToCampaign called with amount ", amount);
-
         const data = await contract.call('donateToCampaign', pId, { value: ethers.utils.parseEther(amount) });
         return data;
     }
 
     const getDonations = async (pId) => {
-        console.log("**@ getDonations called with pid . ", pId);
         const donations = await contract.call('getDonators', pId);
-        console.log("**@ getDonations called donations is ,  ", donations);
-
         const numberOfDonators = donations[0].length;
-        console.log("**@ getDonations called numberOfDonators is ,  ", numberOfDonators);
-
-
         const parsedDonations = [];
 
         for (let i = 0; i < numberOfDonators; i++) {
@@ -87,9 +67,6 @@ export const StateContextProvider = ({ children }) => {
                 donation: ethers.utils.formatUnits(donations[1][i].toString(), 18)
             })
         }
-
-        console.log("**@ before returning parsedDonations is , ", parsedDonations)
-
         return parsedDonations;
 
     }

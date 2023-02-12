@@ -8,7 +8,6 @@ import { ethers } from 'ethers';
 
 const CampaignDetails = () => {
   const { state } = useLocation();
-  console.log("**@ campaign details are , ", state);
   const navigate = useNavigate();
   const { getDonations, address, contract, donateToCampaign } = useStateContext();
   const [isLoading, setIsLoading] = useState(false);
@@ -17,9 +16,6 @@ const CampaignDetails = () => {
   const remainingDays = daysLeft(state.deadline);
 
   const handleDonate = async () => {
-    console.log("**@ handeDonate called with state , ", state);
-    console.log("**@ handeDonate called with amount , ", amount);
-
     setIsLoading(true);
     await donateToCampaign(state.pId, amount);
     navigate('/')
@@ -28,7 +24,6 @@ const CampaignDetails = () => {
 
   const fetchDonators = async () => {
     const data = await getDonations(state.pId);
-    console.log("**@ getDonations data is , ", data)
     setDonators(data);
   }
 
